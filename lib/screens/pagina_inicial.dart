@@ -94,7 +94,7 @@ class ItensPaginaInicial extends StatelessWidget {
     return Row(
       children: [
         _FeatureItem(
-          nome: 'Produção',
+          nome: 'Colheita',
           icone: Icons.article,
           corIcone: Colors.red,
           onClick: () => _navegaListaSacasAcai(context),

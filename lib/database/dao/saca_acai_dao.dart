@@ -1,60 +1,49 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:morena_acai10/models/saca_acai.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:morena_acai10/database/app_database.dart';
 
 class SacaAcaiDao {
-  static const String tableSql = 'CREATE TABLE $_tableName('
-      '$_id INTEGER PRIMARY KEY, '
-      '$_quadra TEXT, '
-      '$_pesoSaca DOUBLE)';
+  final FirebaseFirestore db = FirebaseFirestore.instance;
   static const String _tableName = 'saca_acai';
   static const String _id = 'id';
   static const String _quadra = 'quadra';
   static const String _pesoSaca = 'peso_saca';
 
-  Future<int> save(SacaAcai sacaAcai) async {
-    final Database db = await getDatabase();
+  Future save(SacaAcai sacaAcai) async {
+    final DocumentReference save =
+        await db.collection(_tableName).doc(sacaAcai.id);
     final Map<String, dynamic> sacaAcaiMap = {};
-    //sacaAcaiMap[_id] = sacaAcai.id;
+    sacaAcaiMap[_id] = sacaAcai.id;
     sacaAcaiMap[_quadra] = sacaAcai.quadra;
     sacaAcaiMap[_pesoSaca] = sacaAcai.pesoSaca;
-    return db.insert(_tableName, sacaAcaiMap);
+    return save.set(sacaAcaiMap);
   }
 
   Future<List<SacaAcai>> findAll() async {
-    final Database db = await getDatabase();
-    final List<Map<String, dynamic>> resultado = await db.query(_tableName);
+    final QuerySnapshot query = await db.collection(_tableName).get();
     final List<SacaAcai> sacasAcai = [];
-    for (Map<String, dynamic> linha in resultado) {
+    query.docs.forEach((doc) {
       final SacaAcai sacaAcai = SacaAcai(
-        linha[_pesoSaca],
-        linha[_quadra],
-        id: linha[_id],
+        doc.get(_pesoSaca),
+        doc.get(_quadra),
+        doc.get(_id),
       );
       sacasAcai.add(sacaAcai);
-    }
+    });
     return sacasAcai;
   }
 
-  Future<int> update(SacaAcai sacaAcai) async {
-    final Database db = await getDatabase();
-    final Map<String, dynamic> sacaAcaiMap = {};
-    sacaAcaiMap[_quadra] = sacaAcai.quadra;
-    sacaAcaiMap[_pesoSaca] = sacaAcai.pesoSaca;
-    return db.update(
-      _tableName,
-      sacaAcaiMap,
-      where: 'id = ?',
-      whereArgs: [sacaAcai.id],
-    );
-  }
+Future delete(String id) async {
+    final delete = await db.collection(_tableName).doc(id);
+    return delete.delete();
 
-  Future<int> delete(int id) async {
-    final Database db = await getDatabase();
-    return db.delete(
-      _tableName,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-  }
+
+//   final Database db = await getDatabase();
+//   return db.delete(
+//     _tableName,
+//     where: 'id = ?',
+//     whereArgs: [id],
+//   );
+}
+
+
 }

@@ -21,7 +21,7 @@ class _ListaVendasSacasAcaiState extends State<ListaVendasSacasAcai> {
       ),
       body: ListView.builder(
         itemCount: _vendasSacaAcai.length,
-        itemBuilder: (context, indice){
+        itemBuilder: (context, indice) {
           final VendaSacaAcai vendaSacaAcai = _vendasSacaAcai[indice];
           return ItemVendaSacaAcai(vendaSacaAcai);
         },
@@ -46,10 +46,9 @@ class _ItemVendaSacaAcaiState extends State<ItemVendaSacaAcai> {
       child: ListTile(
         leading: Icon(Icons.monetization_on),
         title: Text(widget._vendaSacaAcai.valor.toString()),
-        subtitle: Text(widget._vendaSacaAcai.idSacaAcaiUsuario.toString()),
-        onTap: (){},
+        subtitle: Text('teste'),
+        onTap: () {},
       ),
     );
   }
 }
-

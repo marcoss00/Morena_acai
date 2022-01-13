@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:morena_acai10/screens/pagina_inicial.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MorenaAcai());

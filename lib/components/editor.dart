@@ -10,13 +10,15 @@ class Editor extends StatelessWidget {
   final String? valorInicial;
 
   const Editor(
-      {Key? key, this.controlador,
+      {Key? key,
+      this.controlador,
       required this.dica,
       this.icone,
       required this.rotulo,
       this.teclado,
       this.validador,
-      this.valorInicial}) : super(key: key);
+      this.valorInicial})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -106,11 +106,11 @@ class _FormularioAtualizacaoSacasAcaiState
   void _atualizaSacaAcai(BuildContext context) {
     final String quadra = _controladorCampoQuadra.text;
     final double? pesoSaca = double.tryParse(_controladorCampoPesoSaca.text);
-
     final SacaAcai sacaAcaiAtualizada =
-        SacaAcai(pesoSaca!, quadra, id: widget._sacaAcaiEditando.id);
-    _dao.update(sacaAcaiAtualizada).then((id) => Navigator.pop(context));
+        SacaAcai(pesoSaca!, quadra, widget._sacaAcaiEditando.id);
+    _dao.save(sacaAcaiAtualizada);
 
+    Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text(_mensagemSnackBar),

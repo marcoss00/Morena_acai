@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:morena_acai10/components/editor.dart';
 import 'package:morena_acai10/database/dao/saca_acai_dao.dart';
 import 'package:morena_acai10/models/saca_acai.dart';
+import 'package:uuid/uuid.dart';
 
 const _tituloAppBar = 'Nova Tela de Açaí';
 const _rotuloBotaoFormularioSacaAcai = 'Confirmar';
@@ -11,6 +12,7 @@ const _rotuloPesoSaca = 'Peso';
 const _dicaPesoSaca = '0.00';
 const _rotuloQuantidadeSaca = 'Quantidade *';
 const _dicaQuantidadeSaca = '0';
+const _mensagemSnackBar = 'Tela(s) Cadastrada Com Sucesso!';
 
 class FormularioSacasAcai extends StatefulWidget {
   const FormularioSacasAcai({Key? key}) : super(key: key);
@@ -124,16 +126,18 @@ class FormularioSacasAcaiState extends State<FormularioSacasAcai> {
     final double? pesoSaca = double.tryParse(_controladorCampoPesoSaca.text);
     final int? quantidadeSaca =
         int.tryParse(_controladorCampoQuantidadeSaca.text);
+    String id;
 
     for (int i = 0; i < quantidadeSaca!; i++) {
-      final SacaAcai sacaAcaiCriada = SacaAcai(pesoSaca!, quadra,);
+      id = Uuid().v1();
+      final SacaAcai sacaAcaiCriada = SacaAcai(pesoSaca!, quadra, id);
       _dao.save(sacaAcaiCriada);
     }
 
     Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Tela(s) Cadastrada Com Sucesso!'),
+        content: Text(_mensagemSnackBar),
       ),
     );
   }

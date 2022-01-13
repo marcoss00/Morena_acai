@@ -4,7 +4,7 @@ import 'package:morena_acai10/models/saca_acai.dart';
 import 'package:morena_acai10/screens/formulario_atualizacao_sacas_acai.dart';
 import 'formulario_sacas_acai.dart';
 
-const _tituloAppBar = 'Produção';
+const _tituloAppBar = 'Colheita';
 
 class ListaSacasAcai extends StatefulWidget {
   const ListaSacasAcai({Key? key}) : super(key: key);
@@ -171,8 +171,8 @@ class _DeleteButtonState extends State<DeleteButton> {
                 child: const Text('Sim'),
                 onPressed: () {
                   _dao
-                      .delete(widget._sacaAcai.id!)
-                      .then((id) => Navigator.pop(context));
+                      .delete(widget._sacaAcai.id);
+                  Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Tela Deletada Com Sucesso!'),
