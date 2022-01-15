@@ -1,12 +1,17 @@
 class SacaAcai {
-  String id;
-  final double pesoSaca;
-  final String quadra;
+  final String? id;
+  final double? pesoSaca;
+  final String? quadra;
+  final String? nome;
+  //final double? precoVendido;
+  final DateTime? dataColheitaSaca;
 
-  SacaAcai(this.pesoSaca, this.quadra, this.id);
-
-  @override
-  String toString() {
-    return 'SacaAcai{id: $id, pesoSaca: $pesoSaca, quadra: $quadra}';
-  }
+  SacaAcai({
+    this.nome,
+    //this.precoVendido,
+    this.pesoSaca,
+    this.quadra,
+    this.id,
+    this.dataColheitaSaca,
+  });
 }

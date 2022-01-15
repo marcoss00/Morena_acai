@@ -39,3 +39,37 @@ class Editor extends StatelessWidget {
     );
   }
 }
+
+class EditorData extends StatelessWidget {
+  final String? Function(String?)? validador;
+  final String rotulo;
+  final TextEditingController controlador;
+  final IconData? icone;
+  final void Function() onTap;
+
+  const EditorData({
+    Key? key,
+    this.validador,
+    required this.rotulo,
+    this.icone,
+    required this.onTap,
+    required this.controlador,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: TextFormField(
+        controller: controlador,
+        validator: validador,
+        style: const TextStyle(fontSize: 24.0),
+        decoration: InputDecoration(
+          icon: icone != null ? Icon(icone) : null,
+          labelText: rotulo,
+        ),
+        onTap: onTap,
+      ),
+    );
+  }
+}

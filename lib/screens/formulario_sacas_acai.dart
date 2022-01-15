@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:morena_acai10/components/editor.dart';
 import 'package:morena_acai10/database/dao/saca_acai_dao.dart';
 import 'package:morena_acai10/models/saca_acai.dart';
@@ -13,6 +14,7 @@ const _dicaPesoSaca = '0.00';
 const _rotuloQuantidadeSaca = 'Quantidade *';
 const _dicaQuantidadeSaca = '0';
 const _mensagemSnackBar = 'Tela(s) Cadastrada Com Sucesso!';
+const _rotuloDataColheitaSaca = 'Data da Colheita *';
 
 class FormularioSacasAcai extends StatefulWidget {
   const FormularioSacasAcai({Key? key}) : super(key: key);
@@ -29,8 +31,11 @@ class FormularioSacasAcaiState extends State<FormularioSacasAcai> {
       TextEditingController();
   final TextEditingController _controladorCampoQuantidadeSaca =
       TextEditingController();
+  final TextEditingController _controladorCampoDataColheita =
+      TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final SacaAcaiDao _dao = SacaAcaiDao();
+  late DateTime dataColheitaSaca;
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +94,21 @@ class FormularioSacasAcaiState extends State<FormularioSacasAcai> {
                   return null;
                 },
               ),
+              EditorData(
+                controlador: _controladorCampoDataColheita,
+                rotulo: _rotuloDataColheitaSaca,
+                icone: Icons.calendar_today_outlined,
+                validador: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Campo Obrigatório';
+                  }
+                  return null;
+                },
+                onTap: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  _selectDate(context);
+                },
+              ),
               Editor(
                 controlador: _controladorCampoQuantidadeSaca,
                 dica: _dicaQuantidadeSaca,
@@ -121,16 +141,37 @@ class FormularioSacasAcaiState extends State<FormularioSacasAcai> {
     );
   }
 
+  Future _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2016),
+      lastDate: DateTime(2025),
+      locale: const Locale('pt', 'BR'),
+    );
+    dataColheitaSaca = picked!;
+    final String dataColheitaSacaBR =
+        DateFormat(DateFormat.YEAR_MONTH_DAY, 'pt-Br').format(dataColheitaSaca);
+    _controladorCampoDataColheita.text = dataColheitaSacaBR;
+  }
+
   void _criaSacaAcai(BuildContext context) {
     final String quadra = _controladorCampoQuadra.text;
     final double? pesoSaca = double.tryParse(_controladorCampoPesoSaca.text);
     final int? quantidadeSaca =
         int.tryParse(_controladorCampoQuantidadeSaca.text);
-    String id;
+    final String nome =
+        '${dataColheitaSaca.day}${dataColheitaSaca.month}${dataColheitaSaca.year}$quadra';
 
     for (int i = 0; i < quantidadeSaca!; i++) {
-      id = Uuid().v1();
-      final SacaAcai sacaAcaiCriada = SacaAcai(pesoSaca!, quadra, id);
+      final String id = Uuid().v1();
+      final SacaAcai sacaAcaiCriada = SacaAcai(
+        pesoSaca: pesoSaca!,
+        quadra: quadra,
+        id: id,
+        nome: nome,
+        dataColheitaSaca: dataColheitaSaca,
+      );
       _dao.save(sacaAcaiCriada);
     }
 

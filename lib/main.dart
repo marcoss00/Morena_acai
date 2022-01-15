@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:morena_acai10/screens/pagina_inicial.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -9,11 +10,15 @@ void main() async {
 }
 
 class MorenaAcai extends StatelessWidget {
-  const MorenaAcai({Key? key}) : super(key: key); //solicitação do da IDE
+  const MorenaAcai({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch(
           primarySwatch: const MaterialColor(

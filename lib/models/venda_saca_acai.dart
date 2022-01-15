@@ -1,14 +1,11 @@
 class VendaSacaAcai {
   final String id;
   final double valor;
+  final String comprador;
 
   VendaSacaAcai(
     this.valor,
     this.id,
+    this.comprador,
   );
-
-  @override
-  String toString() {
-    return 'VendaSacaAcai{id: $id, valor: $valor}';
-  }
 }

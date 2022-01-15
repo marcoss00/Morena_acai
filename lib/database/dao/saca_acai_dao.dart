@@ -7,6 +7,8 @@ class SacaAcaiDao {
   static const String _id = 'id';
   static const String _quadra = 'quadra';
   static const String _pesoSaca = 'peso_saca';
+  static const String _dataColheitaSaca = 'data_colheita_saca';
+  static const String _nome = 'nome';
 
   Future save(SacaAcai sacaAcai) async {
     final DocumentReference save =
@@ -15,35 +17,30 @@ class SacaAcaiDao {
     sacaAcaiMap[_id] = sacaAcai.id;
     sacaAcaiMap[_quadra] = sacaAcai.quadra;
     sacaAcaiMap[_pesoSaca] = sacaAcai.pesoSaca;
+    sacaAcaiMap[_nome] = sacaAcai.nome;
+    sacaAcaiMap[_dataColheitaSaca] = sacaAcai.dataColheitaSaca;
     return save.set(sacaAcaiMap);
   }
 
   Future<List<SacaAcai>> findAll() async {
     final QuerySnapshot query = await db.collection(_tableName).get();
     final List<SacaAcai> sacasAcai = [];
-    query.docs.forEach((doc) {
+    for (var doc in query.docs) {
+      final Timestamp _dataColheitaSacaConvertido = doc.get(_dataColheitaSaca);
       final SacaAcai sacaAcai = SacaAcai(
-        doc.get(_pesoSaca),
-        doc.get(_quadra),
-        doc.get(_id),
+        pesoSaca: doc.get(_pesoSaca),
+        quadra: doc.get(_quadra),
+        id: doc.get(_id),
+        nome: doc.get(_nome),
+        dataColheitaSaca: _dataColheitaSacaConvertido.toDate(),
       );
       sacasAcai.add(sacaAcai);
-    });
+    }
     return sacasAcai;
   }
 
-Future delete(String id) async {
+  Future delete(String id) async {
     final delete = await db.collection(_tableName).doc(id);
     return delete.delete();
-
-
-//   final Database db = await getDatabase();
-//   return db.delete(
-//     _tableName,
-//     where: 'id = ?',
-//     whereArgs: [id],
-//   );
-}
-
-
+  }
 }

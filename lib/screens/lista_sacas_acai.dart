@@ -3,6 +3,7 @@ import 'package:morena_acai10/database/dao/saca_acai_dao.dart';
 import 'package:morena_acai10/models/saca_acai.dart';
 import 'package:morena_acai10/screens/formulario_atualizacao_sacas_acai.dart';
 import 'formulario_sacas_acai.dart';
+import 'package:intl/intl.dart';
 
 const _tituloAppBar = 'Colheita';
 
@@ -84,6 +85,10 @@ class ItemSacaAcai extends StatefulWidget {
 }
 
 class _ItemSacaAcaiState extends State<ItemSacaAcai> {
+  late final String dataColheitaSacaBR =
+      DateFormat(DateFormat.YEAR_MONTH_DAY, 'pt-Br')
+          .format(widget._sacaAcai.dataColheitaSaca!);
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -93,13 +98,10 @@ class _ItemSacaAcaiState extends State<ItemSacaAcai> {
           width: 40,
           height: 40,
         ),
-        title: const Text('id da saca'),
-        subtitle: Text('Quadra: ' +
-            widget._sacaAcai.quadra +
-            '\n' +
-            'Peso: ' +
-            widget._sacaAcai.pesoSaca.toString() +
-            ' Kg'),
+        title: Text(widget._sacaAcai.nome!),
+        subtitle: Text(
+            'Quadra: ${widget._sacaAcai.quadra}\nPeso: ${widget._sacaAcai.pesoSaca.toString()}'
+            ' Kg\nColheita: $dataColheitaSacaBR'),
         //selected: true,
         onTap: () {},
         trailing: SizedBox(
@@ -170,8 +172,7 @@ class _DeleteButtonState extends State<DeleteButton> {
               TextButton(
                 child: const Text('Sim'),
                 onPressed: () {
-                  _dao
-                      .delete(widget._sacaAcai.id);
+                  _dao.delete(widget._sacaAcai.id!);
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
